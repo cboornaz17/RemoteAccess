@@ -8,34 +8,42 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/* The Client class creates a client that communicates with the Server class
+ * on the server assigned to the SERVER instance field below and the port assigned
+ * to the SOCKET_PORT instance field below. Mimics basic UNIX commands. 
+ */
+@SuppressWarnings("resource") //Hides any "unused resource" warnings
 public class Client {
 	
+	//Change to the directory that you want to interface with the server. All files will be saved there or in a subdirectory.
 	private static final File ROOT = new File("/Users/josh/Desktop/Temp/Client/");
 	
-	public final static int SOCKET_PORT = 1234;
-	public final static String SERVER = "128.113.153.85";
-	public final static int FILE_SIZE = 50000000;
+	public final static int SOCKET_PORT = 1234; //The port to connect to
+	public final static String SERVER = "128.113.153.85"; //The address to connect to
+	public final static int FILE_SIZE = 1_000_000_000; //max file size of 1GB
 
 	public static void main(String[] args) throws IOException {		
 		while(true) {
 			
 			Scanner scanner = new Scanner(System.in);
-			Socket socket = new Socket(SERVER, SOCKET_PORT);
+			Socket socket = new Socket(SERVER, SOCKET_PORT); //Create a socket to connect to the server
 			Scanner serverScanner = new Scanner(socket.getInputStream());
 			
 			System.out.println("Enter a command");
-			String cmd = scanner.nextLine();
+			String cmd = scanner.nextLine(); //Read in the command
 			
 			if(cmd.equalsIgnoreCase("exit")) {
 				System.out.println("Exiting...");
 				break;
 			}
 			
-			PrintStream p = new PrintStream(socket.getOutputStream());
+			PrintStream p = new PrintStream(socket.getOutputStream()); //Send the command to the server
 			p.println(cmd);
 			
 			String[] arguments = cmd.split(" ");
 			
+			//TODO: Move this logic to Server side
+			//Do client side work here
 			if(arguments[0].equalsIgnoreCase("get")) {
 				if(arguments.length == 2) {
 					getFile(ROOT.getAbsolutePath() + "/" + arguments[1], socket);
@@ -47,6 +55,7 @@ public class Client {
 				continue;
 			}
 			
+			//Receive the results from the Server and print it to the terminal
 			String result = "";
 			while(serverScanner.hasNextLine()) {
 				result += serverScanner.nextLine() + "\n";
@@ -55,8 +64,12 @@ public class Client {
 			System.out.println(result);
 		}
 	}
-
-	public static void getFile(String FILE_TO_RECEIVED, Socket sock) throws UnknownHostException, IOException {
+	
+	/* Receives an incoming file to a specified location
+	 * @param FILE_TO_RECEIEVE The location (including new file name) to save the incoming file.
+	 * @param sock The socket that is connected to the file's sender
+	 */
+	public static void getFile(String FILE_TO_RECEIVE, Socket sock) throws UnknownHostException, IOException {
 		int bytesRead;
 		int current = 0;
 		FileOutputStream fos = null;
@@ -65,7 +78,7 @@ public class Client {
 		try {
 			byte[] mybytearray = new byte[FILE_SIZE];
 			InputStream is = sock.getInputStream();
-			fos = new FileOutputStream(FILE_TO_RECEIVED);
+			fos = new FileOutputStream(FILE_TO_RECEIVE);
 			bos = new BufferedOutputStream(fos);
 
 			do {
@@ -76,7 +89,7 @@ public class Client {
 
 			bos.write(mybytearray, 0, current);
 			bos.flush();
-			System.out.println("File " + FILE_TO_RECEIVED + " downloaded (" + current + " bytes read)");
+			System.out.println("File " + FILE_TO_RECEIVE + " downloaded (" + current + " bytes read)");
 		} finally {
 			if (fos != null)
 				fos.close();

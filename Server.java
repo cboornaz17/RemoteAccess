@@ -8,18 +8,29 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+/* The Server class acts as the Server side for a file sharing system.
+ * It opens a server on the machine and listens on the port assigned to the instance
+ * field SOCKET_PORT. Only one client can connect at a time, multithreading required to allow for 
+ * multiple client connections at once. Currently supports commands: "ls", "ls -a", "cd <file name>",
+ * "cd ../", "get <file name>" , and "get <name of file to be received by client> <name to save
+ * file under on client side>"
+ */
+@SuppressWarnings("resource") //Hides any "unused resource" warnings
 public class Server {
 	
+	//Change to root directory of the server's machine.
 	private static final File ROOT_DIRECTORY = new File("/Users/josh/Desktop");
-	public static final int SOCKET_PORT = 1234;
+	public static final int SOCKET_PORT = 1234; //The port for the server to listen on
 	
-	private static File currentFile = new File("/Users/josh/Desktop");
+	private static File currentFile = new File("/Users/josh/Desktop"); //The current file that the client is interacting with
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Starting Server...");
 		ServerSocket socket = null;
+		
+		currentFile = ROOT_DIRECTORY;
 		try {
-			socket = new ServerSocket(1234);
+			socket = new ServerSocket(1234); //Create server and start listener
 		} catch (Exception e) {
 			System.out.println("Could not start server... Terminating");
 			e.printStackTrace();
@@ -28,19 +39,20 @@ public class Server {
 		
 		try {
 			while(true) {
-				Socket client = socket.accept();
+				Socket client = socket.accept(); //Command has been received... Parse it
 				try {
 					Scanner clientScanner = new Scanner(client.getInputStream());		
 					
 					String input = "";
 					try {
-						input = clientScanner.nextLine();
+						input = clientScanner.nextLine(); //Read the input
 					} catch(Exception e) {
 						
 					}
 					
-					String[] arguments = input.split(" ");
+					String[] arguments = input.split(" "); //Split the command into its parts
 					
+					//Parse the command and execute it.
 					if(arguments.length == 1) {
 						if(arguments[0].equalsIgnoreCase("exit")) {
 							continue;
@@ -95,14 +107,17 @@ public class Server {
 						}
 					}
 				} finally {
-						client.close();
+					client.close(); //Close the clients stream
 				}
 			} 
 		} finally {
-			socket.close();
+			socket.close(); //Close the server's stream
 		}		
 	}
 	
+	/* Prints the contents of a given directory not including hidden files (Files that begin with a ".")
+	 * @param file The file to print the contents of
+	 */
 	private static String printDirectory(File file) {
 		String s = "";
 		
@@ -132,6 +147,9 @@ public class Server {
 		return s;
 	}
 	
+	/* Prints the contents of a given directory including hidden files (Files that begin with a ".")
+	 * @param file The file to print the contents of
+	 */
 	private static String printDirectoryAll(File file) {
 		String s = "";
 		
@@ -152,6 +170,10 @@ public class Server {
 		return s;
 	}
 	
+	/* Sends a file to a given socket
+	 * @param FILE_TO_SEND The path to the file to send
+	 * @param sock The socket to send the file to
+	 */
 	public static void sendFile(String FILE_TO_SEND, Socket sock) throws IOException {
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
