@@ -10,11 +10,13 @@ import java.util.Scanner;
 
 public class Server {
 	
+	private static final File ROOT_DIRECTORY = new File("Users/josh/Desktop");
 	public static final int SOCKET_PORT = 1234;
+	
 	private static File currentFile = new File("/Users/josh");
 	
 	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(1234);
+		ServerSocket socket = new ServerSocket(SOCKET_PORT);
 		
 		try {
 			while(true) {
@@ -90,7 +92,7 @@ public class Server {
 			} 
 		} finally {
 			socket.close();
-			currentFile = new File("Users/josh/Desktop");
+			currentFile = ROOT_DIRECTORY;
 		}		
 	}
 	

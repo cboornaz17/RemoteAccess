@@ -10,14 +10,14 @@ import java.util.Scanner;
 public class Client {
 
 	public final static int SOCKET_PORT = 1234;
-	public final static String SERVER = "127.0.0.1";
+	public final static String SERVER = "128.113.153.85";
 	public final static int FILE_SIZE = 50000000;
 
 	public static void main(String[] args) throws IOException {		
 		while(true) {
 			
 			Scanner scanner = new Scanner(System.in);
-			Socket socket = new Socket("128.113.153.85", 1234);
+			Socket socket = new Socket(SERVER, SOCKET_PORT);
 			Scanner serverScanner = new Scanner(socket.getInputStream());
 			
 			System.out.println("Enter a command");
