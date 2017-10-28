@@ -1,4 +1,5 @@
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +9,9 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client {
-
+	
+	private static final File ROOT = new File("/Users/josh/Desktop/Temp/Client/");
+	
 	public final static int SOCKET_PORT = 1234;
 	public final static String SERVER = "128.113.153.85";
 	public final static int FILE_SIZE = 50000000;
@@ -35,10 +38,10 @@ public class Client {
 			
 			if(arguments[0].equalsIgnoreCase("get")) {
 				if(arguments.length == 2) {
-					getFile("/Users/josh/Desktop/Temp/Client/" + arguments[1], socket);
+					getFile(ROOT.getAbsolutePath() + "/" + arguments[1], socket);
 					System.out.print("\n\n");
 				} else if(arguments.length == 3) {
-					getFile("/Users/josh/Desktop/Temp/Client/" + arguments[2], socket);
+					getFile(ROOT.getAbsolutePath() + "/" + arguments[2], socket);
 					System.out.println("\n\n");
 				}
 				continue;

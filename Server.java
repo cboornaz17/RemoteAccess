@@ -10,13 +10,21 @@ import java.util.Scanner;
 
 public class Server {
 	
-	private static final File ROOT_DIRECTORY = new File("Users/josh/Desktop");
+	private static final File ROOT_DIRECTORY = new File("/Users/josh/Desktop");
 	public static final int SOCKET_PORT = 1234;
 	
-	private static File currentFile = new File("/Users/josh");
+	private static File currentFile = new File("/Users/josh/Desktop");
 	
 	public static void main(String[] args) throws IOException {
-		ServerSocket socket = new ServerSocket(SOCKET_PORT);
+		System.out.println("Starting Server...");
+		ServerSocket socket = null;
+		try {
+			socket = new ServerSocket(1234);
+		} catch (Exception e) {
+			System.out.println("Could not start server... Terminating");
+			e.printStackTrace();
+		}
+		System.out.println("Server successfully started.");
 		
 		try {
 			while(true) {
@@ -67,12 +75,12 @@ public class Server {
 										p.println(printDirectory(currentFile));
 									} else {
 										currentFile = newFile;
-										p.println(currentFile);
+										System.out.println(newFile.getAbsolutePath());
+										p.println(printDirectory(currentFile));
 									}
 								} else {
-									String newFile = currentFile.getPath() + "/" + fileName;
+									String newFile = currentFile.getAbsolutePath() + "/" + fileName;
 									File f = new File(newFile);
-									
 									if(f.exists()) {
 										currentFile = new File(f.getAbsolutePath());
 										p.println(printDirectory(currentFile));
@@ -81,7 +89,7 @@ public class Server {
 							} else if(arguments[0].equalsIgnoreCase("get")) {
 								if(arguments.length >= 2) {
 									String fileName = arguments[1];									
-									sendFile(currentFile.getAbsolutePath() + "/" + fileName, client);
+									sendFile(currentFile.getPath() + "/" + fileName, client);
 								}
 							}
 						}
@@ -92,7 +100,6 @@ public class Server {
 			} 
 		} finally {
 			socket.close();
-			currentFile = ROOT_DIRECTORY;
 		}		
 	}
 	
