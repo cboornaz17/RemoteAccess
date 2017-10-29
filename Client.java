@@ -20,7 +20,7 @@ public class Client {
 	
 	public final static int SOCKET_PORT = 1234; //The port to connect to
 	public final static String SERVER = "128.113.153.85"; //The address to connect to
-	public final static int FILE_SIZE = 1_000_000_000; //max file size of 1GB
+	public final static int FILE_SIZE = 2_000_000_000; //max file size of 2GB
 
 	public static void main(String[] args) throws IOException {		
 		while(true) {

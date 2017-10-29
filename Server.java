@@ -107,7 +107,7 @@ public class Server {
 						}
 					}
 				} finally {
-					client.close(); //Close the clients stream
+					client.close(); //Close the client's stream
 				}
 			} 
 		} finally {
