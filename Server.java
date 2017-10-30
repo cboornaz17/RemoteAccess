@@ -45,7 +45,7 @@ public class Server {
 					
 					String input = "";
 					try {
-						input = clientScanner.nextLine(); //Read the input
+						input = clientScanner.nextLine(); //Read the command from the client
 					} catch(Exception e) {
 						
 					}
