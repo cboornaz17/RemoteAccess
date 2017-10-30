@@ -1,11 +1,15 @@
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /* The Server class acts as the Server side for a file sharing system.
@@ -23,6 +27,8 @@ public class Server {
 	public static final int SOCKET_PORT = 1234; //The port for the server to listen on
 	
 	private static File currentFile = new File("C:\\Users\\AlexK\\Desktop\\ServerFiles"); //The current file that the client is interacting with
+	
+	public final static int FILE_SIZE = 1_000_000_000; //max file size of 2GB
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Starting Server...");
@@ -101,6 +107,11 @@ public class Server {
 								if(arguments.length >= 2) {
 									String fileName = arguments[1];									
 									sendFile(currentFile.getPath() + "/" + fileName, client);
+								}
+							} else if(arguments[0].equalsIgnoreCase("put")) {
+								if(arguments.length >= 2) {
+									String fileName = arguments[1];
+									getFile(currentFile.getAbsolutePath() + "/" + fileName, client);
 								}
 							}
 						}
@@ -196,6 +207,39 @@ public class Server {
 				os.close();
 			if (sock != null)
 				sock.close();
+		}
+	}
+	
+	/* Receives an incoming file to a specified location
+	 * @param FILE_TO_RECEIEVE The location (including new file name) to save the incoming file.
+	 * @param sock The socket that is connected to the file's sender
+	 */
+	public static void getFile(String FILE_TO_RECEIVE, Socket sock) throws UnknownHostException, IOException {
+		int bytesRead;
+		int current = 0;
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+
+		try {
+			byte[] mybytearray = new byte[FILE_SIZE];
+			InputStream is = sock.getInputStream();
+			fos = new FileOutputStream(FILE_TO_RECEIVE);
+			bos = new BufferedOutputStream(fos);
+
+			do {
+				bytesRead = is.read(mybytearray, current, (mybytearray.length - current));
+				if (bytesRead >= 0)
+					current += bytesRead;
+			} while (bytesRead < 0);
+
+			bos.write(mybytearray, 0, current);
+			bos.flush();
+			System.out.println("File " + FILE_TO_RECEIVE + " downloaded (" + current + " bytes read)");
+		} finally {
+			if (fos != null)
+				fos.close();
+			if (bos != null)
+				bos.close();
 		}
 	}
 }

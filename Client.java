@@ -1,8 +1,11 @@
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -20,7 +23,7 @@ public class Client {
 	
 	public final static int SOCKET_PORT = 1234; //The port to connect to
 	public final static String SERVER = "129.161.222.59"; //The address to connect to
-	public final static int FILE_SIZE = 1_000_000_000; //max file size of 2GB
+	public final static int FILE_SIZE = 1_000_000_000; //max file size of 1GB
 
 	public static void main(String[] args) throws IOException {		
 		
@@ -62,6 +65,11 @@ public class Client {
 					System.out.println("\n\n");
 				}
 				continue;
+			} else if(arguments[0].equalsIgnoreCase("put")) {
+				if(arguments.length == 2) {
+					sendFile(ROOT.getAbsolutePath() + "/" + arguments[1], socket);
+					System.out.println("\n\n");
+				}
 			}
 			
 			//Receive the results from the Server and print it to the terminal
@@ -104,6 +112,36 @@ public class Client {
 				fos.close();
 			if (bos != null)
 				bos.close();
+		}
+	}
+	
+	/* Sends a file to a given socket
+	 * @param FILE_TO_SEND The path to the file to send
+	 * @param sock The socket to send the file to
+	 */
+	public static void sendFile(String FILE_TO_SEND, Socket sock) throws UnknownHostException, IOException {
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		OutputStream os = null;
+
+		try{
+			File myFile = new File(FILE_TO_SEND);
+			byte[] mybytearray = new byte[(int) myFile.length()];
+			fis = new FileInputStream(myFile);
+			bis = new BufferedInputStream(fis);
+			bis.read(mybytearray, 0, mybytearray.length);
+			os = sock.getOutputStream();
+			System.out.println("Sending " + FILE_TO_SEND + "(" + mybytearray.length + " bytes)");
+			os.write(mybytearray, 0, mybytearray.length);
+			os.flush();
+			System.out.println("Done.");
+		} finally {
+			if (bis != null)
+				bis.close();
+			if (os != null)
+				os.close();
+			if (sock != null)
+				sock.close();
 		}
 	}
 }
