@@ -19,10 +19,10 @@ import java.util.Scanner;
 public class Server {
 	
 	//Change to root directory of the server's machine.
-	private static final File ROOT_DIRECTORY = new File("/Users/josh/Desktop");
+	private static final File ROOT_DIRECTORY = new File("/Users/josh/Desktop/Temp/Server");
 	public static final int SOCKET_PORT = 1234; //The port for the server to listen on
 	
-	private static File currentFile = new File("/Users/josh/Desktop"); //The current file that the client is interacting with
+	private static File currentFile = new File("/Users/josh/Desktop/Temp/Server"); //The current file that the client is interacting with
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println("Starting Server...");
@@ -87,7 +87,6 @@ public class Server {
 										p.println(printDirectory(currentFile));
 									} else {
 										currentFile = newFile;
-										System.out.println(newFile.getAbsolutePath());
 										p.println(printDirectory(currentFile));
 									}
 								} else {

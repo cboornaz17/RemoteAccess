@@ -16,18 +16,27 @@ import java.util.Scanner;
 public class Client {
 	
 	//Change to the directory that you want to interface with the server. All files will be saved there or in a subdirectory.
-	private static final File ROOT = new File("/Users/josh/Desktop/Temp/Client/");
+	private static File ROOT = new File(System.getProperty("user.home"));//new File("/Users/josh/Desktop/Temp/Client/");
 	
 	public final static int SOCKET_PORT = 1234; //The port to connect to
 	public final static String SERVER = "128.113.153.85"; //The address to connect to
 	public final static int FILE_SIZE = 2_000_000_000; //max file size of 2GB
 
 	public static void main(String[] args) throws IOException {		
+		
+		if(args.length == 1) {
+			ROOT = new File(args[0]);
+		}
+		System.out.println("Looking for server...");
+		boolean hasConnected = false;
 		while(true) {
 			
 			Scanner scanner = new Scanner(System.in);
 			Socket socket = new Socket(SERVER, SOCKET_PORT); //Create a socket to connect to the server
 			Scanner serverScanner = new Scanner(socket.getInputStream());
+			
+			if(!hasConnected)
+				System.out.println("Connection to server established!");
 			
 			System.out.println("Enter a command");
 			String cmd = scanner.nextLine(); //Read in the command
