@@ -5,10 +5,9 @@ import java.util.Scanner;
 
 public class SampleClient {
 
-	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		Socket socket = new Socket("129.161.222.179", 1234); //Create a socket to connect to the server
+		Socket socket = new Socket("129.161.222.179", 49200); //Create a socket to connect to the server
 		Scanner serverScanner = new Scanner(socket.getInputStream());
 		
 		System.out.println("Enter a number");
@@ -17,7 +16,7 @@ public class SampleClient {
 		PrintStream p = new PrintStream(socket.getOutputStream()); //Send the command to the server
 		p.println(cmd);
 		
-		int result = serverScanner.nextInt();
+		double result = serverScanner.nextInt();
 		System.out.println(result);
 		
 		p.close();
