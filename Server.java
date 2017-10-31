@@ -23,10 +23,10 @@ import java.util.Scanner;
 public class Server {
 	
 	//Change to root directory of the server's machine.
-	private static final File ROOT_DIRECTORY = new File("C:\\Users\\AlexK\\Desktop\\ServerFiles");
+	private static final File ROOT_DIRECTORY = new File("/Users/josh/Desktop/Temp/Server");
 	public static final int SOCKET_PORT = 1234; //The port for the server to listen on
 	
-	private static File currentFile = new File("C:\\Users\\AlexK\\Desktop\\ServerFiles"); //The current file that the client is interacting with
+	private static File currentFile = new File("/Users/josh/Desktop/Temp/Server"); //The current file that the client is interacting with
 	
 	public final static int FILE_SIZE = 1_000_000_000; //max file size of 2GB
 	
