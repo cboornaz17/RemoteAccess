@@ -16,7 +16,8 @@ public class SampleClient {
 		PrintStream p = new PrintStream(socket.getOutputStream()); //Send the command to the server
 		p.println(cmd);
 		
-		double result = serverScanner.nextInt();
+		//Commment!
+		double result = serverScanner.nextDouble();
 		System.out.println(result);
 		
 		p.close();
