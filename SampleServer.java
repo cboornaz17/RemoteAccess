@@ -20,6 +20,10 @@ public class SampleServer {
 		
 		PrintStream p = new PrintStream(client.getOutputStream());
 		p.println(result);
+		
+		p.close();
+		clientScanner.close();
+		client.close();
+		socket.close();
 	}
-
 }

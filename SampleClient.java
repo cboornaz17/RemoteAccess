@@ -8,7 +8,7 @@ public class SampleClient {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		Socket socket = new Socket("127.0.0.1", 1234); //Create a socket to connect to the server
+		Socket socket = new Socket("129.161.222.179", 1234); //Create a socket to connect to the server
 		Scanner serverScanner = new Scanner(socket.getInputStream());
 		
 		System.out.println("Enter a number");
@@ -19,5 +19,10 @@ public class SampleClient {
 		
 		int result = serverScanner.nextInt();
 		System.out.println(result);
+		
+		p.close();
+		serverScanner.close();
+		socket.close();
+		scanner.close();
 	}
 }
