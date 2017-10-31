@@ -17,8 +17,14 @@ public class SampleClient {
 		p.println(cmd);
 		
 		//Commment!
-		double result = serverScanner.nextDouble();
-		System.out.println(result);
+		
+		try {
+			double result = serverScanner.nextDouble();
+			System.out.println(result);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Youre a fucking moron");
+		}
 		
 		p.close();
 		serverScanner.close();
