@@ -16,15 +16,8 @@ public class SampleClient {
 		PrintStream p = new PrintStream(socket.getOutputStream()); //Send the command to the server
 		p.println(cmd);
 		
-		//Commment!
-		
-		try {
-			double result = serverScanner.nextDouble();
-			System.out.println(result);
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Youre a fucking moron");
-		}
+		double result = serverScanner.nextDouble();
+		System.out.println(result);
 		
 		p.close();
 		serverScanner.close();
